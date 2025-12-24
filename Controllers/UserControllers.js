@@ -29,11 +29,11 @@ const addUsers = async (req, res, next) =>{
         console.log(err);
     }
     //not insert users
-    if(!user){
-        return res.status(404).send({message: "Unable to add users"});
+    if(!users){
+        return res.status(404).json({message: "Unable to add users"});
 
     }
-    return res.status(200).json({user});
+    return res.status(200).json({users});
 
 
 };
@@ -52,7 +52,7 @@ const getById = async (req, res, next) =>{
     }
     //not available users
     if(!user){
-        return res.status(404).send({message: "User Not Found"});
+        return res.status(404).json({message: "User Not Found"});
 
     }
     return res.status(200).json({user});
@@ -75,13 +75,31 @@ const updateUser = async (req, res, next) =>{
     }
     //not available users
     if(!users){
-        return res.status(404).send({message: "Unable to update User Details"});
+        return res.status(404).json({message: "Unable to update User Details"});
 
     }
     return res.status(200).json({users});
+};
+//Delete User Details
+const deleteUser = async (req, res, next) =>{
+    const id = req.params.id;
+
+    let user;
+
+    try{
+        user = await User.findByIdAndDelete(id)
+    }catch(err){
+        console.log(err);
+    }
+    if (!user){
+        return res.status(404).json({message: "Unable to Delete User Details"});
+
+    }
+    return res.status(200).json({user});
 };
 
 exports.getAllUsers = getAllUsers;
 exports.addUsers = addUsers;
 exports.getById = getById;
-exports.updateUser=updateUser;
+exports.updateUser = updateUser;
+exports.deleteUser = deleteUser; 
